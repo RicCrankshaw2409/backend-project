@@ -10,7 +10,7 @@ const seed = async (data) => {
   const { categoryData, commentData, reviewData, userData } = data;
   await dropTables();
   await createTables();
-  await insertDataIntoTables();
+  await insertDataIntoTables(categoryData, commentData, reviewData, userData);
 };
 
 module.exports = seed;

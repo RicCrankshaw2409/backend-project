@@ -1,7 +1,6 @@
 const db = require("../connection.js");
 const data = require("../data/development-data");
 const format = require("pg-format");
-const { categoryData, commentData, reviewData, userData } = data;
 const { formatData } = require("./data-manipulation");
 
 exports.dropTables = async () => {
@@ -9,7 +8,6 @@ exports.dropTables = async () => {
   await db.query(`DROP TABLE IF EXISTS categories cascade;`);
   await db.query(`DROP TABLE IF EXISTS reviews cascade;`);
   await db.query(`DROP TABLE IF EXISTS comments cascade;`);
-  console.log("All tables deleted");
 };
 
 exports.createTables = async () => {
@@ -47,23 +45,25 @@ exports.createTables = async () => {
       created_at DATE NOT NULL,
       body VARCHAR (1000) NOT NULL
       );`);
-  console.log("All tables created");
 };
 
-exports.insertDataIntoTables = async () => {
+exports.insertDataIntoTables = async (
+  categoryData,
+  commentData,
+  reviewData,
+  userData
+) => {
   let queryStr = format(
     `INSERT INTO categories (slug, description) VALUES %L;`,
     formatData(categoryData, ["slug", "description"])
   );
   await db.query(queryStr);
-  console.log("Category table populated with data");
 
   queryStr = format(
     `INSERT INTO users (username, avatar_url, name) VALUES %L;`,
     formatData(userData, ["username", "avatar_url", "name"])
   );
   await db.query(queryStr);
-  console.log("User table populated with data");
 
   queryStr = format(
     `INSERT INTO reviews (title, designer, owner, review_img_url, review_body, category, created_at, votes) VALUES %L;`,
@@ -79,7 +79,6 @@ exports.insertDataIntoTables = async () => {
     ])
   );
   await db.query(queryStr);
-  console.log("Reviews table populated with data");
 
   queryStr = format(
     `INSERT INTO comments (body, votes, author, review_id, created_at) VALUES %L;`,
@@ -92,5 +91,4 @@ exports.insertDataIntoTables = async () => {
     ])
   );
   await db.query(queryStr);
-  console.log("Reviews table populated with data");
 };
