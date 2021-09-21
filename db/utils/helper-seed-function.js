@@ -2,6 +2,7 @@ const db = require("../connection.js");
 const data = require("../data/development-data");
 const format = require("pg-format");
 const { categoryData, commentData, reviewData, userData } = data;
+const { formatData } = require("./data-manipulation");
 
 exports.dropTables = async () => {
   await db.query(`DROP TABLE IF EXISTS users cascade;`);
@@ -50,54 +51,45 @@ exports.createTables = async () => {
 };
 
 exports.insertDataIntoTables = async () => {
-  const categoryDataArray = categoryData.map((category) => {
-    return [category.slug, category.description];
-  });
   let queryStr = format(
     `INSERT INTO categories (slug, description) VALUES %L;`,
-    categoryDataArray
+    formatData(categoryData, ["slug", "description"])
   );
   await db.query(queryStr);
   console.log("Category table populated with data");
-  const userDataArray = userData.map((users) => {
-    return [users.username, users.avatar_url, users.name];
-  });
+
   queryStr = format(
     `INSERT INTO users (username, avatar_url, name) VALUES %L;`,
-    userDataArray
+    formatData(userData, ["username", "avatar_url", "name"])
   );
   await db.query(queryStr);
   console.log("User table populated with data");
-  const reviewsDataArray = reviewData.map((reviews) => {
-    return [
-      reviews.title,
-      reviews.designer,
-      reviews.owner,
-      reviews.review_img_url,
-      reviews.review_body,
-      reviews.category,
-      reviews.created_at,
-      reviews.votes,
-    ];
-  });
+
   queryStr = format(
     `INSERT INTO reviews (title, designer, owner, review_img_url, review_body, category, created_at, votes) VALUES %L;`,
-    reviewsDataArray
+    formatData(reviewData, [
+      "title",
+      "designer",
+      "owner",
+      "review_img_url",
+      "review_body",
+      "category",
+      "created_at",
+      "votes",
+    ])
   );
   await db.query(queryStr);
   console.log("Reviews table populated with data");
-  const commentDataArray = commentData.map((comments) => {
-    return [
-      comments.body,
-      comments.votes,
-      comments.author,
-      comments.review_id,
-      comments.created_at,
-    ];
-  });
+
   queryStr = format(
     `INSERT INTO comments (body, votes, author, review_id, created_at) VALUES %L;`,
-    commentDataArray
+    formatData(commentData, [
+      "body",
+      "votes",
+      "author",
+      "review_id",
+      "created_at",
+    ])
   );
   await db.query(queryStr);
   console.log("Reviews table populated with data");
