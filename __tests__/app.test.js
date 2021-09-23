@@ -8,7 +8,7 @@ beforeEach(() => seed(testData));
 
 afterAll(() => db.end());
 
-describe("GetCategories", () => {
+describe("getCategories", () => {
   test("200: should respond with an object containing a key of categories and all categories as the value ", async () => {
     const res = await request(app).get("/api/categories").expect(200);
     expect(res.body.categories).toHaveLength(4);
@@ -34,7 +34,7 @@ describe("GetCategories", () => {
   });
 });
 
-describe("GetReviewsById", () => {
+describe("getReviewsById", () => {
   test("200: should respond with an object containing a review with one review that matches the id", async () => {
     const res = await request(app).get("/api/reviews/4").expect(200);
     expect(res.body.review).toMatchObject({
@@ -58,5 +58,79 @@ describe("GetReviewsById", () => {
   test("400: Handles and invalid review_id", async () => {
     const res = await request(app).get("/api/reviews/invalid_url").expect(400);
     expect(res.body.msg).toBe("Invalid URL format");
+  });
+});
+
+describe("patchReviewsById", () => {
+  test("200: should take a patch request and return the updated object", async () => {
+    const res = await request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: 50 })
+      .expect(200);
+
+    expect(res.body.updatedReview.votes).toBe(55);
+  });
+  test("200: Can handle decrementing the votes and return the updated object", async () => {
+    const res = await request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: -4 })
+      .expect(200);
+
+    expect(res.body.updatedReview.votes).toBe(1);
+  });
+  test("400: Missing required body returns 400 error", async () => {
+    const res = await request(app).patch("/api/reviews/2").send({}).expect(400);
+
+    expect(res.body.msg).toBe("Please submit a body of the correct format");
+  });
+  test("400: If the body is incorrect type returns 400 error", async () => {
+    const res = await request(app)
+      .patch("/api/reviews/2")
+      .send({ inc_votes: "word" })
+      .expect(400);
+  });
+});
+
+describe("getReviews ", () => {
+  test("200: Should respond with an array of review objects", async () => {
+    const res = await request(app).get("/api/reviews").expect(200);
+
+    expect(res.body.reviews).toHaveLength(13);
+    res.body.reviews.forEach((review) => {
+      expect(review).toMatchObject({
+        owner: expect.any(String),
+        title: expect.any(String),
+        review_id: expect.any(Number),
+        review_body: expect.any(String),
+        designer: expect.any(String),
+        review_img_url: expect.any(String),
+        category: expect.any(String),
+        created_at: expect.any(String),
+        votes: expect.any(Number),
+      });
+    });
+  });
+  test("200: Should accept the sort_by query", async () => {
+    const res = await request(app)
+      .get("/api/reviews?sort_by=votes")
+      .expect(200);
+
+    expect(res.body.reviews[0].title).toBe("Agricola");
+  });
+  test.only("200: Should accept an order query, which can be set to either asc or desc, defaults to descending", async () => {
+    const res = await request(app)
+      .get("/api/reviews?sort_by=review_id&order=DESC")
+      .expect(200);
+
+    expect(res.body.reviews[0].title).toBe(
+      "Settlers of Catan: Don't Settle For Less"
+    );
+  });
+  test.only("200: Should filter reviews by given category", async () => {
+    const res = await request(app)
+      .get("/api/reviews?category=social deduction")
+      .expect(200);
+
+    expect(res.body.reviews).toHaveLength(11);
   });
 });
