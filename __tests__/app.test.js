@@ -115,9 +115,11 @@ describe("getReviews ", () => {
       .get("/api/reviews?sort_by=votes")
       .expect(200);
 
-    expect(res.body.reviews[0].title).toBe("Agricola");
+    expect(res.body.reviews[0].title).toBe(
+      "Scythe; you're gonna need a bigger table!"
+    );
   });
-  test.only("200: Should accept an order query, which can be set to either asc or desc, defaults to descending", async () => {
+  test("200: Should accept an order query, which can be set to either asc or desc, defaults to descending", async () => {
     const res = await request(app)
       .get("/api/reviews?sort_by=review_id&order=DESC")
       .expect(200);
@@ -126,11 +128,16 @@ describe("getReviews ", () => {
       "Settlers of Catan: Don't Settle For Less"
     );
   });
-  test.only("200: Should filter reviews by given category", async () => {
+  test("200: Should filter reviews by given category", async () => {
     const res = await request(app)
       .get("/api/reviews?category=social deduction")
       .expect(200);
 
     expect(res.body.reviews).toHaveLength(11);
   });
+});
+
+describe("getReviewCommentsByReviewId", () => {
+  const res = await request(app).get("/api/reviews/2/comments").expect(200);
+  expect(res.body.comments).toHaveLength(3);
 });

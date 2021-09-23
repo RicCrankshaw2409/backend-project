@@ -19,6 +19,4 @@ const config =
       }
     : {};
 
-console.log(config);
-
 module.exports = new Pool(config);

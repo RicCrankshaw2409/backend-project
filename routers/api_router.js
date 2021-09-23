@@ -9,8 +9,4 @@ apiRouter.use("/reviews", reviewRouter);
 apiRouter.use("/comments", commentRouter);
 apiRouter.use("/users", userRouter);
 
-apiRouter.use("/", (req, res) => {
-  res.status(200).send({ msg: "Welcome" });
-});
-
 module.exports = apiRouter;
