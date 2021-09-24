@@ -53,7 +53,7 @@ describe("getReviewsById", () => {
   });
   test("404: Handles a review_id that does not exists", async () => {
     const res = await request(app).get("/api/reviews/999").expect(404);
-    expect(res.body.msg).toBe("No user found with the id 999");
+    expect(res.body.msg).toBe("No review found with the id 999");
   });
   test("400: Handles and invalid review_id", async () => {
     const res = await request(app).get("/api/reviews/invalid_url").expect(400);
@@ -138,6 +138,36 @@ describe("getReviews ", () => {
 });
 
 describe("getReviewCommentsByReviewId", () => {
-  const res = await request(app).get("/api/reviews/2/comments").expect(200);
-  expect(res.body.comments).toHaveLength(3);
+  test("Should return with all the comments, with the matching review_id", async () => {
+    const res = await request(app).get("/api/reviews/2/comments").expect(200);
+    expect(res.body.comments).toHaveLength(3);
+  });
+  test("404: Should return 404 message if review_id cannot be found", async () => {
+    const res = await request(app).get("/api/reviews/764/comments").expect(404);
+    expect(res.body.msg).toBe("No comments found with the review_id of 764");
+  });
+  test("400: Should return 400 if given an invalid review_id type", async () => {
+    const res = await request(app)
+      .get("/api/reviews/invalid_url/comments")
+      .expect(400);
+    expect(res.body.msg).toBe("Invalid URL format");
+  });
+});
+
+describe("postCommentByReviewId", () => {
+  test("200: Should respond with an the updated comment", async () => {
+    const res = await request(app)
+      .post("/api/reviews/2/comments")
+      .send({ username: "dav3rid", body: "Excellent game hours of fun" })
+      .expect(200);
+    expect(res.body.comment.author).toBe("dav3rid");
+    expect(res.body.comment.body).toBe("Excellent game hours of fun");
+  });
+  test("400: Should respond with a 400 error msg when not provided the correct body", async () => {
+    const res = await request(app)
+      .post("/api/reviews/2/comments")
+      .send({})
+      .expect(400);
+    expect(res.body.msg).toBe("Missing required field from body");
+  });
 });

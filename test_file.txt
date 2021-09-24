@@ -59,3 +59,10 @@ You are now connected to database "nc_games_test" as user "richardcrankshaw".
          1 | Agricola                                             | Farmyard fun!                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Uwe Rosenberg          | https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png                                       |     1 | euro game        | mallionaire     | 2021-01-18 10:00:20.514+00
 (13 rows)
 
+ comment_id |   author    | review_id | votes | created_at |                                   body                                    
+------------+-------------+-----------+-------+------------+---------------------------------------------------------------------------
+          1 | bainesface  |         2 |    16 | 2017-11-22 | I loved this game too!
+          4 | bainesface  |         2 |    16 | 2017-11-22 | EPIC board game!
+          5 | mallionaire |         2 |    13 | 2021-01-18 | Now this is a story all about how, board games turned my life upside down
+(3 rows)
+

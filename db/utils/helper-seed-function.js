@@ -27,13 +27,13 @@ exports.createTables = async () => {
       title VARCHAR (100) NOT NULL,
       review_body VARCHAR (1000) NOT NULL,
       designer VARCHAR (1000) NOT NULL,
-      review_img_url VARCHAR (500) NOT NULL,
-      votes INT,
+      review_img_url VARCHAR (1000) DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
+      votes INT DEFAULT 0,
       category VARCHAR(50),
       FOREIGN KEY (category) REFERENCES categories (slug),
       owner VARCHAR(50),
       FOREIGN KEY (owner) REFERENCES users (username),
-      created_at TIMESTAMPTZ 
+      created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP 
       );`);
   await db.query(`CREATE TABLE comments (
       comment_id SERIAL PRIMARY KEY,
@@ -41,8 +41,8 @@ exports.createTables = async () => {
       FOREIGN KEY (author) REFERENCES users (username),
       review_id INT,
       FOREIGN KEY (review_id) REFERENCES reviews (review_id),
-      votes INT,
-      created_at DATE NOT NULL,
+      votes INT DEFAULT 0,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       body VARCHAR (1000) NOT NULL
       );`);
 };
