@@ -192,4 +192,16 @@ describe("getApi", () => {
   });
 });
 
-describe("deleteCommentsByCommentId", () => {});
+describe("deleteCommentsByCommentId", () => {
+  test.only("204: Deletes comments by their id and returns a 204 code when complete", async () => {
+    const res = await request(app).delete("/api/comments/1").expect(204);
+  });
+});
+
+// describe('getApiUsers', () => {
+//   test.only("200: responds with an object containing the usernames of all users", async () => {
+//     const res = await request(app).get("/api/users").expect(200);
+//     expect(res.body).toEqual([{}])
+//   })
+
+// });

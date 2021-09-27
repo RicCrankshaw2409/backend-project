@@ -27,3 +27,17 @@ exports.addCommentsByReviewId = async (review_id, username, body) => {
   );
   return result.rows[0];
 };
+
+exports.removeCommentsByCommentId = async (comment_id) => {
+  if (!comment_id) {
+    return Promise.reject({
+      status: 404,
+      msg: `No comment found with the comment_id of ${comment_id}`,
+    });
+  }
+  const result = await db.query(
+    "DELETE FROM comments WHERE comment_id = $1 RETURNING *;",
+    [comment_id]
+  );
+  return result.rows[0];
+};
