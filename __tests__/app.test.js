@@ -223,11 +223,32 @@ describe("getUsersByUsername", () => {
 });
 
 describe("patchCommentByCommentId", () => {
-  test("200: Updates comment and returns the updated comment", () => {
+  test("200: Updates comment and returns the updated comment", async () => {
     const res = await request(app)
       .patch("/api/comments/1")
       .send({ inc_votes: 3 });
+    expect(res.body.comment.votes).toBe(19);
+  });
+  test("200: Can handle decrementing the votes and return the updated object", async () => {
+    const res = await request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: -4 })
+      .expect(200);
 
-    expect(res.body.votes).toBe(19);
+    expect(res.body.comment.votes).toBe(12);
+  });
+  test("400: Missing required body returns 400 error", async () => {
+    const res = await request(app)
+      .patch("/api/comments/1")
+      .send({})
+      .expect(400);
+
+    expect(res.body.msg).toBe("Please submit a body of the correct format");
+  });
+  test("400: If the body is incorrect type returns 400 error", async () => {
+    const res = await request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: "word" })
+      .expect(400);
   });
 });
