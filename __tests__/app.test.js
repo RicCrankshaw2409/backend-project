@@ -171,3 +171,25 @@ describe("postCommentByReviewId", () => {
     expect(res.body.msg).toBe("Missing required field from body");
   });
 });
+
+describe("getApi", () => {
+  test("200: responds with all available end-points", async () => {
+    const res = await request(app).get("/api").expect(200);
+    expect(res.body).toEqual({
+      end_points: {
+        categories: {
+          GET: "/api/categories",
+        },
+        reviews: {
+          GET: "/api/reviews",
+          GET: "/api/reviews/:review_id",
+          GET: "/api/reviews/:review_id/comments",
+          PATCH: "/api/reviews/review_id",
+          POST: "/api/reviews/review_id/comments",
+        },
+      },
+    });
+  });
+});
+
+describe("deleteCommentsByCommentId", () => {});
