@@ -198,7 +198,7 @@ describe("deleteCommentByCommentId", () => {
   });
 });
 
-describe("getApiUsers", () => {
+describe("getUsers", () => {
   test("200: Responds with an object containing the usernames of all users", async () => {
     const res = await request(app).get("/api/users").expect(200);
     expect(res.body.result).toHaveLength(4);
@@ -220,7 +220,14 @@ describe("getUsersByUsername", () => {
       name: "philippa",
     });
   });
-  test("400: Should provide a 400 status code if invalid username format", () => {
-    const res = await request(app).get("/api/users/4657");
+});
+
+describe("patchCommentByCommentId", () => {
+  test("200: Updates comment and returns the updated comment", () => {
+    const res = await request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 3 });
+
+    expect(res.body.votes).toBe(19);
   });
 });
