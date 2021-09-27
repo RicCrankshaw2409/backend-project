@@ -36,11 +36,11 @@ The project can be forked from <u>(https://github.com/RicCrankshaw2409/be-nc-gam
 
 The following dependencies will be required and can be installed used the command;
 
-`npm install express dotenv psql psql-format`.
+`npm install express dotenv psql psql-format`
 
 The following dev-dependencies will be required for testing purposes and can be installed with the command;
 
-`npm install jest jest-sorted supertest -D`.
+`npm install jest jest-sorted supertest -D`
 
 ### <u>Seeding the database</u>
 
