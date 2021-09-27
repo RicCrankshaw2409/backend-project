@@ -192,16 +192,35 @@ describe("getApi", () => {
   });
 });
 
-describe("deleteCommentsByCommentId", () => {
-  test.only("204: Deletes comments by their id and returns a 204 code when complete", async () => {
+describe("deleteCommentByCommentId", () => {
+  test("204: Deletes comments by their id and returns a 204 code when complete", async () => {
     const res = await request(app).delete("/api/comments/1").expect(204);
   });
 });
 
-// describe('getApiUsers', () => {
-//   test.only("200: responds with an object containing the usernames of all users", async () => {
-//     const res = await request(app).get("/api/users").expect(200);
-//     expect(res.body).toEqual([{}])
-//   })
+describe("getApiUsers", () => {
+  test("200: Responds with an object containing the usernames of all users", async () => {
+    const res = await request(app).get("/api/users").expect(200);
+    expect(res.body.result).toHaveLength(4);
+  });
+  test("404: Incorrect path responds with 404 error code", async () => {
+    const res = await request(app).get("/api/incorrect_url").expect(404);
+    expect(res.body.msg).toBe("Incorrect URL provided");
+  });
+});
 
-// });
+describe("getUsersByUsername", () => {
+  test("200: Responds with the the user object of provided username", async () => {
+    const res = await request(app)
+      .get("/api/users/philippaclaire9")
+      .expect(200);
+    expect(res.body.user).toEqual({
+      username: "philippaclaire9",
+      avatar_url: "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+      name: "philippa",
+    });
+  });
+  test("400: Should provide a 400 status code if invalid username format", () => {
+    const res = await request(app).get("/api/users/4657");
+  });
+});
