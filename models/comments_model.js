@@ -29,6 +29,7 @@ exports.addCommentsByReviewId = async (review_id, username, body) => {
 };
 
 exports.removeCommentsByCommentId = async (comment_id) => {
+  console.log(comment_id);
   if (!comment_id) {
     return Promise.reject({
       status: 404,

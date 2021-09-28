@@ -80,7 +80,6 @@ describe("patchReviewsById", () => {
   });
   test("400: Missing required body returns 400 error", async () => {
     const res = await request(app).patch("/api/reviews/2").send({}).expect(400);
-
     expect(res.body.msg).toBe("Please submit a body of the correct format");
   });
   test("400: If the body is incorrect type returns 400 error", async () => {
@@ -88,6 +87,12 @@ describe("patchReviewsById", () => {
       .patch("/api/reviews/2")
       .send({ inc_votes: "word" })
       .expect(400);
+  });
+  test("404: If the given review-id is a number but does not exist, return 404 error", async () => {
+    const res = await request(app)
+      .patch("/api/reviews/576")
+      .send({ inc_votes: 2 })
+      .expect(404);
   });
 });
 
@@ -138,7 +143,7 @@ describe("getReviews ", () => {
 });
 
 describe("getReviewCommentsByReviewId", () => {
-  test("Should return with all the comments, with the matching review_id", async () => {
+  test("201: Should return with all the comments, with the matching review_id", async () => {
     const res = await request(app).get("/api/reviews/2/comments").expect(200);
     expect(res.body.comments).toHaveLength(3);
   });
@@ -155,11 +160,11 @@ describe("getReviewCommentsByReviewId", () => {
 });
 
 describe("postCommentByReviewId", () => {
-  test("200: Should respond with an the updated comment", async () => {
+  test("201: Should respond with an the updated comment", async () => {
     const res = await request(app)
       .post("/api/reviews/2/comments")
       .send({ username: "dav3rid", body: "Excellent game hours of fun" })
-      .expect(200);
+      .expect(201);
     expect(res.body.comment.author).toBe("dav3rid");
     expect(res.body.comment.body).toBe("Excellent game hours of fun");
   });
@@ -198,66 +203,73 @@ describe("getApi", () => {
       },
     });
   });
+});
 
-  describe("deleteCommentByCommentId", () => {
-    test("204: Deletes comments by their id and returns a 204 code when complete", async () => {
-      const res = await request(app).delete("/api/comments/1").expect(204);
+describe("deleteCommentByCommentId", () => {
+  test("204: Deletes comments by their id and returns a 204 code when complete", async () => {
+    const res = await request(app).delete("/api/comments/1").expect(204);
+  });
+  test.only("404: returned for non-existent ID", async () => {
+    const res = await request(app).delete("/api/comments/765").expect(404);
+  });
+  test("400: Returned Invalid comment_id ", async () => {
+    const res = await request(app)
+      .delete("/api/comments/invalid_url")
+      .expect(400);
+  });
+});
+
+describe("getUsers", () => {
+  test("200: Responds with an object containing the usernames of all users", async () => {
+    const res = await request(app).get("/api/users").expect(200);
+    expect(res.body.result).toHaveLength(4);
+  });
+  test("404: Incorrect path responds with 404 error code", async () => {
+    const res = await request(app).get("/api/incorrect_url").expect(404);
+    expect(res.body.msg).toBe("Incorrect URL provided");
+  });
+});
+
+describe("getUsersByUsername", () => {
+  test("200: Responds with the the user object of provided username", async () => {
+    const res = await request(app)
+      .get("/api/users/philippaclaire9")
+      .expect(200);
+    expect(res.body.user).toEqual({
+      username: "philippaclaire9",
+      avatar_url: "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
+      name: "philippa",
     });
   });
+});
 
-  describe("getUsers", () => {
-    test("200: Responds with an object containing the usernames of all users", async () => {
-      const res = await request(app).get("/api/users").expect(200);
-      expect(res.body.result).toHaveLength(4);
-    });
-    test("404: Incorrect path responds with 404 error code", async () => {
-      const res = await request(app).get("/api/incorrect_url").expect(404);
-      expect(res.body.msg).toBe("Incorrect URL provided");
-    });
+describe("patchCommentByCommentId", () => {
+  test("200: Updates comment and returns the updated comment", async () => {
+    const res = await request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: 3 });
+    expect(res.body.comment.votes).toBe(19);
   });
+  test("200: Can handle decrementing the votes and return the updated object", async () => {
+    const res = await request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: -4 })
+      .expect(200);
 
-  describe("getUsersByUsername", () => {
-    test("200: Responds with the the user object of provided username", async () => {
-      const res = await request(app)
-        .get("/api/users/philippaclaire9")
-        .expect(200);
-      expect(res.body.user).toEqual({
-        username: "philippaclaire9",
-        avatar_url:
-          "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
-        name: "philippa",
-      });
-    });
+    expect(res.body.comment.votes).toBe(12);
   });
+  test("400: Missing required body returns 400 error", async () => {
+    const res = await request(app)
+      .patch("/api/comments/1")
+      .send({})
+      .expect(400);
 
-  describe("patchCommentByCommentId", () => {
-    test("200: Updates comment and returns the updated comment", async () => {
-      const res = await request(app)
-        .patch("/api/comments/1")
-        .send({ inc_votes: 3 });
-      expect(res.body.comment.votes).toBe(19);
-    });
-    test("200: Can handle decrementing the votes and return the updated object", async () => {
-      const res = await request(app)
-        .patch("/api/comments/1")
-        .send({ inc_votes: -4 })
-        .expect(200);
-
-      expect(res.body.comment.votes).toBe(12);
-    });
-    test("400: Missing required body returns 400 error", async () => {
-      const res = await request(app)
-        .patch("/api/comments/1")
-        .send({})
-        .expect(400);
-
-      expect(res.body.msg).toBe("Please submit a body of the correct format");
-    });
-    test("400: If the body is incorrect type returns 400 error", async () => {
-      const res = await request(app)
-        .patch("/api/comments/1")
-        .send({ inc_votes: "word" })
-        .expect(400);
-    });
+    expect(res.body.msg).toBe("Please submit a body of the correct format");
+  });
+  test("400: If the body is incorrect type returns 400 error", async () => {
+    const res = await request(app)
+      .patch("/api/comments/1")
+      .send({ inc_votes: "word" })
+      .expect(400);
   });
 });

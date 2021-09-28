@@ -20,7 +20,7 @@ exports.postCommentByReviewId = async (req, res, next) => {
     const { review_id } = req.params;
     const { username, body } = req.body;
     const result = await addCommentsByReviewId(review_id, username, body);
-    res.status(200).send({ comment: result });
+    res.status(201).send({ comment: result });
   } catch (err) {
     next(err);
   }
