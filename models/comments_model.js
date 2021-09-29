@@ -1,11 +1,15 @@
 const db = require("../db/connection");
 
 exports.fetchReviewCommentsByReviewId = async (review_id) => {
+  const doesReviewIdExist = await db.query(
+    "SELECT * FROM reviews WHERE review_id = $1;",
+    [review_id]
+  );
   const result = await db.query(
     "SELECT * FROM comments WHERE review_id = $1;",
     [review_id]
   );
-  if (result.rows.length === 0) {
+  if (doesReviewIdExist.rows.length === 0) {
     return Promise.reject({
       status: 404,
       msg: `No comments found with the review_id of ${review_id}`,

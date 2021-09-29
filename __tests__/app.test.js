@@ -169,9 +169,9 @@ describe("getReviewCommentsByReviewId", () => {
       .expect(400);
     expect(res.body.msg).toBe("Invalid URL format");
   });
-  test("201: valid ID, but has no comments responds with an empty array of comments", async () => {
-    const res = await request(app).get("/api/review/1/comments").expect(201);
-    expect(res.body.msg).toEqual([]);
+  test.only("201: valid ID, but has no comments responds with an empty array of comments", async () => {
+    const res = await request(app).get("/api/reviews/1/comments").expect(201);
+    expect(res.body.comments).toEqual([]);
   });
 });
 
