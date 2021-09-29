@@ -32,7 +32,6 @@ exports.deleteCommentByCommentId = async (req, res, next) => {
     const result = await removeCommentsByCommentId(comment_id);
     res.status(204).send();
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };

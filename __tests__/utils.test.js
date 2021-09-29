@@ -33,6 +33,19 @@ describe("FormatData", () => {
     ];
     expect(actual).toEqual(expected);
   });
+  test("Does not mutate the initial array", () => {
+    const actual = formatData(categoryData, ["slug"]);
+    expect(categoryData).toEqual([
+      {
+        slug: "euro game",
+        description: "Abstact games that involve little luck",
+      },
+      {
+        slug: "social deduction",
+        description: "Players attempt to uncover each other's hidden role",
+      },
+      { slug: "dexterity", description: "Games involving physical skill" },
+      { slug: "children's games", description: "Games suitable for children" },
+    ]);
+  });
 });
-
-describe("createQueryString", () => {});

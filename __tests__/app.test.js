@@ -41,14 +41,12 @@ describe("getReviewsById", () => {
       owner: "mallionaire",
       title: "Dolor reprehenderit",
       review_id: 4,
-      review_body:
-        "Consequat velit occaecat voluptate do. Dolor pariatur fugiat sint et proident ex do consequat est. Nisi minim laboris mollit cupidatat et adipisicing laborum do. Sint sit tempor officia pariatur duis ullamco labore ipsum nisi voluptate nulla eu veniam. Et do ad id dolore id cillum non non culpa. Cillum mollit dolor dolore excepteur aliquip. Cillum aliquip quis aute enim anim ex laborum officia. Aliqua magna elit reprehenderit Lorem elit non laboris irure qui aliquip ad proident. Qui enim mollit Lorem labore eiusmod",
-      designer: "Gamey McGameface",
       review_img_url:
         "https://images.pexels.com/photos/278918/pexels-photo-278918.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
       category: "social deduction",
       created_at: "2021-01-22T11:35:50.936Z",
       votes: 7,
+      comment_count: "0",
     });
   });
   test("404: Handles a review_id that does not exists", async () => {
@@ -58,6 +56,10 @@ describe("getReviewsById", () => {
   test("400: Handles and invalid review_id", async () => {
     const res = await request(app).get("/api/reviews/invalid_url").expect(400);
     expect(res.body.msg).toBe("Invalid URL format");
+  });
+  test("200: Should return with comment count in returned object", async () => {
+    const res = await request(app).get("/api/reviews/4 ").expect(200);
+    expect(res.body.review.comment_count).toBe("0");
   });
 });
 
@@ -106,12 +108,11 @@ describe("getReviews ", () => {
         owner: expect.any(String),
         title: expect.any(String),
         review_id: expect.any(Number),
-        review_body: expect.any(String),
-        designer: expect.any(String),
         review_img_url: expect.any(String),
         category: expect.any(String),
         created_at: expect.any(String),
         votes: expect.any(Number),
+        comment_count: expect.any(String),
       });
     });
   });
@@ -209,7 +210,7 @@ describe("deleteCommentByCommentId", () => {
   test("204: Deletes comments by their id and returns a 204 code when complete", async () => {
     const res = await request(app).delete("/api/comments/1").expect(204);
   });
-  test.only("404: returned for non-existent ID", async () => {
+  test("404: returned for non-existent ID", async () => {
     const res = await request(app).delete("/api/comments/765").expect(404);
   });
   test("400: Returned Invalid comment_id ", async () => {

@@ -32,14 +32,14 @@ You are now connected to database "nc_games_test" as user "richardcrankshaw".
         13 | Settlers of Catan: Don't Settle For Less             | You have stumbled across an uncharted island rich in natural resources, but you are not alone; other adventurers have come ashore too, and the race to settle the island of Catan has begun! Whether you exert military force, build a road to rival the Great Wall, trade goods with ships from the outside world, or some combination of all three, the aim is the same: to dominate the island. Will you prevail? Proceed strategically, trade wisely, and may the odds be in favour.                                                                                                                                                                                                                                                                                                                    | Klaus Teuber           | https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg                    |    16 | social deduction | mallionaire     | 1970-01-10 04:08:38.4+01
 (13 rows)
 
- comment_id |     author      | review_id | votes | created_at |                                                       body                                                       
-------------+-----------------+-----------+-------+------------+------------------------------------------------------------------------------------------------------------------
-          1 | bainesface      |         2 |    16 | 2017-11-22 | I loved this game too!
-          2 | mallionaire     |         3 |    13 | 2021-01-18 | My dog loved this game too!
-          3 | philippaclaire9 |         3 |    10 | 2021-01-18 | I didn't know dogs could play games
-          4 | bainesface      |         2 |    16 | 2017-11-22 | EPIC board game!
-          5 | mallionaire     |         2 |    13 | 2021-01-18 | Now this is a story all about how, board games turned my life upside down
-          6 | philippaclaire9 |         3 |    10 | 2021-03-27 | Not sure about dogs, but my cat likes to get involved with board games, the boxes are their particular favourite
+ comment_id |     author      | review_id | votes |       created_at        |                                                       body                                                       
+------------+-----------------+-----------+-------+-------------------------+------------------------------------------------------------------------------------------------------------------
+          1 | bainesface      |         2 |    16 | 2017-11-22 12:43:33.389 | I loved this game too!
+          2 | mallionaire     |         3 |    13 | 2021-01-18 10:09:05.41  | My dog loved this game too!
+          3 | philippaclaire9 |         3 |    10 | 2021-01-18 10:09:48.11  | I didn't know dogs could play games
+          4 | bainesface      |         2 |    16 | 2017-11-22 12:36:03.389 | EPIC board game!
+          5 | mallionaire     |         2 |    13 | 2021-01-18 10:24:05.41  | Now this is a story all about how, board games turned my life upside down
+          6 | philippaclaire9 |         3 |    10 | 2021-03-27 19:49:48.11  | Not sure about dogs, but my cat likes to get involved with board games, the boxes are their particular favourite
 (6 rows)
 
  review_id |                        title                         |                                                                                                                                                                                                                                                                                                                                                                                                 review_body                                                                                                                                                                                                                                                                                                                                                                                                 |        designer        |                                                 review_img_url                                                  | votes |     category     |      owner      |         created_at         
@@ -59,10 +59,10 @@ You are now connected to database "nc_games_test" as user "richardcrankshaw".
          1 | Agricola                                             | Farmyard fun!                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Uwe Rosenberg          | https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png                                       |     1 | euro game        | mallionaire     | 2021-01-18 10:00:20.514+00
 (13 rows)
 
- comment_id |   author    | review_id | votes | created_at |                                   body                                    
-------------+-------------+-----------+-------+------------+---------------------------------------------------------------------------
-          1 | bainesface  |         2 |    16 | 2017-11-22 | I loved this game too!
-          4 | bainesface  |         2 |    16 | 2017-11-22 | EPIC board game!
-          5 | mallionaire |         2 |    13 | 2021-01-18 | Now this is a story all about how, board games turned my life upside down
+ comment_id |   author    | review_id | votes |       created_at        |                                   body                                    
+------------+-------------+-----------+-------+-------------------------+---------------------------------------------------------------------------
+          1 | bainesface  |         2 |    16 | 2017-11-22 12:43:33.389 | I loved this game too!
+          4 | bainesface  |         2 |    16 | 2017-11-22 12:36:03.389 | EPIC board game!
+          5 | mallionaire |         2 |    13 | 2021-01-18 10:24:05.41  | Now this is a story all about how, board games turned my life upside down
 (3 rows)
 

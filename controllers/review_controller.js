@@ -10,6 +10,7 @@ exports.getReviews = async (req, res, next) => {
     const result = await fetchReviews(sort_by, order, category);
     res.status(200).send({ reviews: result });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };
