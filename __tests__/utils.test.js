@@ -2,7 +2,12 @@ const db = require("../db/connection");
 const data = require("../db/data/test-data");
 const { categoryData, commentData, reviewData, userData } = data;
 const format = require("pg-format");
-const { formatData } = require("../db/utils/data-manipulation");
+const {
+  formatData,
+  doesCategoryExist,
+} = require("../db/utils/data-manipulation");
+
+afterAll(() => db.end());
 
 describe("FormatData", () => {
   test("Takes an array returns an array", () => {

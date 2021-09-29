@@ -141,6 +141,17 @@ describe("getReviews ", () => {
 
     expect(res.body.reviews).toHaveLength(11);
   });
+  test("404: When provided a non-existent category, return 404", async () => {
+    const res = await request(app)
+      .get("/api/reviews?category=not a category")
+      .expect(404);
+  });
+  test("200: When provided with a valid category, but has no reviews respond with an empty array", async () => {
+    const res = await request(app)
+      .get("/api/reviews?category=children's games")
+      .expect(200);
+    expect(res.body.reviews).toEqual([]);
+  });
 });
 
 describe("getReviewCommentsByReviewId", () => {
@@ -157,6 +168,10 @@ describe("getReviewCommentsByReviewId", () => {
       .get("/api/reviews/invalid_url/comments")
       .expect(400);
     expect(res.body.msg).toBe("Invalid URL format");
+  });
+  test("201: valid ID, but has no comments responds with an empty array of comments", async () => {
+    const res = await request(app).get("/api/review/1/comments").expect(201);
+    expect(res.body.msg).toEqual([]);
   });
 });
 

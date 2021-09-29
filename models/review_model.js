@@ -6,6 +6,10 @@ exports.fetchReviews = async (
   order = "DESC",
   category
 ) => {
+  const doesCategoryExist = await db.query(
+    `SELECT * FROM categories WHERE slug = $1;`,
+    [category]
+  );
   const validColumns = [
     "review_id",
     "title",
@@ -26,20 +30,24 @@ exports.fetchReviews = async (
     GROUP BY reviews.review_id;`,
     [category]
   );
-  if (categorySearch.rows.length > 0) {
+  if (category) {
+    if (doesCategoryExist.rows[0] === undefined) {
+      return Promise.reject({ status: 404, msg: "Category does not exist" });
+    }
     return categorySearch.rows;
   } else {
     if (!validColumns.includes(sort_by) || !validOrder.includes(order)) {
       return Promise.reject({ status: 400, msg: "Bad request" });
-    }
-    let queryStr = `SELECT reviews.owner, reviews.title, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, Count(comments.review_id) AS comment_count
+    } else {
+      let queryStr = `SELECT reviews.owner, reviews.title, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, Count(comments.review_id) AS comment_count
     FROM reviews 
     LEFT JOIN comments
     ON reviews.review_id = comments.review_id
     GROUP BY reviews.review_id
     ORDER BY ${sort_by} ${order};`;
-    const result = await db.query(queryStr);
-    return result.rows;
+      const result = await db.query(queryStr);
+      return result.rows;
+    }
   }
 };
 
