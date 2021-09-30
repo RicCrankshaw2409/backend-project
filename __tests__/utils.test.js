@@ -2,10 +2,14 @@ const db = require("../db/connection");
 const data = require("../db/data/test-data");
 const { categoryData, commentData, reviewData, userData } = data;
 const format = require("pg-format");
+const { formatData } = require("../db/utils/data-manipulation");
 const {
-  formatData,
-  doesCategoryExist,
-} = require("../db/utils/data-manipulation");
+  doesUsernameExist,
+  doesReviewIdExist,
+  doesCommentIdExist,
+  doesItExist,
+} = require("../db/utils/input-verification");
+const comments = require("../db/data/test-data/comments");
 
 afterAll(() => db.end());
 
@@ -52,5 +56,26 @@ describe("FormatData", () => {
       { slug: "dexterity", description: "Games involving physical skill" },
       { slug: "children's games", description: "Games suitable for children" },
     ]);
+  });
+});
+
+describe("doesItExist", () => {
+  test("Should return true if comment_id exists, false if not", async () => {
+    let actual = await doesItExist("comments", 1);
+    expect(actual).toBe(true);
+    actual = await doesItExist("comments", 0);
+    expect(actual).toBe(false);
+  });
+  test("Should return true if review_id exists, false if not", async () => {
+    let actual = await doesItExist("reviews", 1);
+    expect(actual).toBe(true);
+    actual = await doesItExist("reviews", 0);
+    expect(actual).toBe(false);
+  });
+  test("Should return true if username exists, false if not", async () => {
+    let actual = await doesItExist("users", "mallionaire");
+    expect(actual).toBe(true);
+    actual = await doesItExist("users", "richard");
+    expect(actual).toBe(false);
   });
 });

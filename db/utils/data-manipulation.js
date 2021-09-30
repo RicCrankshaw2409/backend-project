@@ -1,4 +1,3 @@
-// extract any functions you are using to manipulate your data, into this file
 const db = require("../connection.js");
 const data = require("../data/development-data");
 const format = require("pg-format");

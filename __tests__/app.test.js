@@ -145,6 +145,7 @@ describe("getReviews ", () => {
     const res = await request(app)
       .get("/api/reviews?category=not a category")
       .expect(404);
+    expect(res.body.msg).toBe("Category of not a category does not exist");
   });
   test("200: When provided with a valid category, but has no reviews respond with an empty array", async () => {
     const res = await request(app)
@@ -156,7 +157,7 @@ describe("getReviews ", () => {
 
 describe("getReviewCommentsByReviewId", () => {
   test("201: Should return with all the comments, with the matching review_id", async () => {
-    const res = await request(app).get("/api/reviews/2/comments").expect(200);
+    const res = await request(app).get("/api/reviews/2/comments").expect(201);
     expect(res.body.comments).toHaveLength(3);
   });
   test("404: Should return 404 message if review_id cannot be found", async () => {
@@ -169,7 +170,7 @@ describe("getReviewCommentsByReviewId", () => {
       .expect(400);
     expect(res.body.msg).toBe("Invalid URL format");
   });
-  test.only("201: valid ID, but has no comments responds with an empty array of comments", async () => {
+  test("201: valid ID, but has no comments responds with an empty array of comments", async () => {
     const res = await request(app).get("/api/reviews/1/comments").expect(201);
     expect(res.body.comments).toEqual([]);
   });
@@ -190,6 +191,25 @@ describe("postCommentByReviewId", () => {
       .send({})
       .expect(400);
     expect(res.body.msg).toBe("Missing required field from body");
+  });
+  test("404: review_id does not exist", async () => {
+    const res = await request(app)
+      .post("/api/reviews/0/comments")
+      .send({ username: "dav3rid", body: "Excellent game hours of fun" })
+      .expect(404);
+    expect(res.body.msg).toBe("No reviews found with the review_id of 0");
+  });
+  test("404: Username does not exist", async () => {
+    const res = await request(app)
+      .post("/api/reviews/1/comments")
+      .send({
+        username: "Richard_Crankshaw",
+        body: "Excellent game hours of fun",
+      })
+      .expect(404);
+    expect(res.body.msg).toBe(
+      `No users with the username of Richard_Crankshaw exists`
+    );
   });
 });
 
@@ -288,4 +308,26 @@ describe("patchCommentByCommentId", () => {
       .send({ inc_votes: "word" })
       .expect(400);
   });
+  test("404: Comment_id does not exists, return 404 error", async () => {
+    const res = await request(app)
+      .patch("/api/comments/0")
+      .send({ inc_votes: 3 })
+      .expect(404);
+    expect(res.body.msg).toBe(`No comment found with the comment_id 0`);
+  });
 });
+
+describe("patchReviewBodyByReviewId", () => {
+  test("200, Update review body and return updated body", () => {
+    const res = await request(app)
+      .patch("/api/reviews/1")
+      .patch({ review_body: "One of the worst board games i've ever played" })
+      .send(200);
+  });
+});
+
+// - [ ] Patch: Edit an review body
+// - [ ] Patch: Edit a comment body
+// - [ ] Patch: Edit a user's information
+// - [ ] Get: Search for an review by title
+// - [ ] Post: add a new user
