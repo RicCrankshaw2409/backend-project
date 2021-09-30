@@ -156,8 +156,8 @@ describe("getReviews ", () => {
 });
 
 describe("getReviewCommentsByReviewId", () => {
-  test("201: Should return with all the comments, with the matching review_id", async () => {
-    const res = await request(app).get("/api/reviews/2/comments").expect(201);
+  test("200: Should return with all the comments, with the matching review_id", async () => {
+    const res = await request(app).get("/api/reviews/2/comments").expect(200);
     expect(res.body.comments).toHaveLength(3);
   });
   test("404: Should return 404 message if review_id cannot be found", async () => {
@@ -170,8 +170,8 @@ describe("getReviewCommentsByReviewId", () => {
       .expect(400);
     expect(res.body.msg).toBe("Invalid URL format");
   });
-  test("201: valid ID, but has no comments responds with an empty array of comments", async () => {
-    const res = await request(app).get("/api/reviews/1/comments").expect(201);
+  test("200: valid ID, but has no comments responds with an empty array of comments", async () => {
+    const res = await request(app).get("/api/reviews/1/comments").expect(200);
     expect(res.body.comments).toEqual([]);
   });
 });
@@ -247,11 +247,13 @@ describe("deleteCommentByCommentId", () => {
   });
   test("404: returned for non-existent ID", async () => {
     const res = await request(app).delete("/api/comments/765").expect(404);
+    expect(res.body.msg).toBe("No comment found with the id 765");
   });
   test("400: Returned Invalid comment_id ", async () => {
     const res = await request(app)
       .delete("/api/comments/invalid_url")
       .expect(400);
+    expect(res.body.msg).toBe("Invalid URL format");
   });
 });
 
@@ -276,6 +278,10 @@ describe("getUsersByUsername", () => {
       avatar_url: "https://avatars2.githubusercontent.com/u/24604688?s=460&v=4",
       name: "philippa",
     });
+  });
+  test("404: Username does not exist should return 404", async () => {
+    const res = await request(app).get("/api/users/richard").expect(404);
+    expect(res.body.msg).toBe("User with username richard does not exist");
   });
 });
 
@@ -316,18 +322,3 @@ describe("patchCommentByCommentId", () => {
     expect(res.body.msg).toBe(`No comment found with the comment_id 0`);
   });
 });
-
-describe("patchReviewBodyByReviewId", () => {
-  test("200, Update review body and return updated body", () => {
-    const res = await request(app)
-      .patch("/api/reviews/1")
-      .patch({ review_body: "One of the worst board games i've ever played" })
-      .send(200);
-  });
-});
-
-// - [ ] Patch: Edit an review body
-// - [ ] Patch: Edit a comment body
-// - [ ] Patch: Edit a user's information
-// - [ ] Get: Search for an review by title
-// - [ ] Post: add a new user

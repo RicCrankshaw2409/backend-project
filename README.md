@@ -12,7 +12,7 @@ This API project was designed with the intention of mimicking a real-world back 
 
 ## <u>Learning objectives</u>
 
-This project will hopefully provide a practical example of designing, creating, testing and delpoying a working API. The project will hopefully aid in my understanding of the following areas;
+This project will hopefully provide a practical example of designing, creating, testing and deploying a working API. The project will hopefully aid in my understanding of the following areas;
 
 - The different types of HTTP endpoints, status codes and the structure of a URL.
 - Learn how to implement Express to streamline the use of HTTP for a more effective program.
@@ -52,7 +52,7 @@ The database uses data from both db/data `development_data` and `test-data` fold
 
 `npm run seed`
 
-The command runs the `db/seeds/run-seed.js`, which subsequently calls the `seed` function which is stored in `db/seed/seed.js`, creating and populating the users, reviews, comments and categories tables within the PSQL database. Functionality for the `seed.js` file have been exported to a seperate file `db/utils/helper-seed-function.js` and the formatting of data to be inputted into tables has been exported to `db/utils/data-manipulation`.
+The command runs the `db/seeds/run-seed.js`, which subsequently calls the `seed` function which is stored in `db/seed/seed.js`, creating and populating the users, reviews, comments and categories tables within the PSQL database. Functionality for the `seed.js` file have been exported to a separate file `db/utils/helper-seed-function.js` and the formatting of data to be inputted into tables has been exported to `db/utils/data-manipulation`.
 
 ### <u>Creation of .env files:</u>
 

@@ -9,7 +9,7 @@ exports.getReviewCommentsByReviewId = async (req, res, next) => {
   try {
     const { review_id } = req.params;
     const result = await fetchReviewCommentsByReviewId(review_id);
-    res.status(201).send({ comments: result });
+    res.status(200).send({ comments: result });
   } catch (err) {
     next(err);
   }
