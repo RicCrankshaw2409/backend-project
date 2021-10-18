@@ -1,7 +1,11 @@
 const express = require("express");
+const cors = require("cors");
+
 const { handle400Error, handleCustomError } = require("./errors/errors");
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.json());
 
