@@ -94,3 +94,32 @@ exports.updateReviewById = async (review_id, votes) => {
     return result.rows[0];
   }
 };
+
+exports.addReview = async (
+  title,
+  designer,
+  owner,
+  review_img_url,
+  review_body,
+  category
+) => {
+  if (
+    title === undefined ||
+    designer === undefined ||
+    owner === undefined ||
+    review_img_url === undefined ||
+    review_body === undefined ||
+    category === undefined
+  ) {
+    return Promise.reject({
+      status: 400,
+      msg: "Missing item in body",
+    });
+  } else {
+    const result = await db.query(
+      `INSERT INTO reviews (title, designer, owner, review_img_url, review_body, category) values ($1, $2, $3, $4, $5, $6) RETURNING *;`,
+      [title, designer, owner, review_img_url, review_body, category]
+    );
+    return result.rows[0];
+  }
+};

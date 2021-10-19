@@ -2,6 +2,7 @@ const {
   fetchReviewById,
   updateReviewById,
   fetchReviews,
+  addReview,
 } = require("../models/review_model");
 
 exports.getReviews = async (req, res, next) => {
@@ -32,5 +33,24 @@ exports.patchReviewById = async (req, res, next) => {
     res.status(200).send({ updatedReview: result });
   } catch (err) {
     next(err);
+  }
+};
+
+exports.postReview = async (req, res, next) => {
+  try {
+    const { title, designer, owner, review_img_url, review_body, category } =
+      req.body;
+    const result = await addReview(
+      title,
+      designer,
+      owner,
+      review_img_url,
+      review_body,
+      category
+    );
+    res.status(200).send({ review: result });
+  } catch (error) {
+    console.log(error);
+    next(error);
   }
 };

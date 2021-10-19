@@ -322,3 +322,33 @@ describe("patchCommentByCommentId", () => {
     expect(res.body.msg).toBe(`No comment found with the comment_id 0`);
   });
 });
+
+describe("postReview", () => {
+  test("200: Should respond with an the updated comment", async () => {
+    const res = await request(app)
+      .post("/api/reviews")
+      .send({
+        title: "Monopoly",
+        designer: "Mr mono-poly",
+        owner: "philippaclaire9",
+        review_img_url: "https://www.seekpng.com/ima/u2w7r5w7w7e6r5o0/",
+        review_body:
+          "Literally the best game I have ever played. Causes loads of family arguments, but so what, its entertainment at its best",
+        category: "dexterity",
+      })
+      .expect(200);
+  });
+  test("400: Should be returned if part of required body is missing", async () => {
+    const res = await request(app)
+      .post("/api/reviews")
+      .send({
+        title: "Monopoly",
+        owner: "philippaclaire9",
+        review_img_url: "https://www.seekpng.com/ima/u2w7r5w7w7e6r5o0/",
+        review_body:
+          "Literally the best game I have ever played. Causes loads of family arguments, but so what, its entertainment at its best",
+        category: "dexterity",
+      })
+      .expect(400);
+  });
+});
