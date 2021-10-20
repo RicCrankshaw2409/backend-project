@@ -10,6 +10,7 @@ exports.fetchReviews = async (
   const validColumns = [
     "review_id",
     "title",
+    "review_body",
     "review_img_url",
     "votes",
     "category",
@@ -19,7 +20,7 @@ exports.fetchReviews = async (
   ];
   const validOrder = ["DESC", "ASC"];
   const categorySearch = await db.query(
-    `SELECT reviews.owner, reviews.title, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, Count(comments.review_id) AS comment_count
+    `SELECT reviews.owner, reviews.title, reviews.review_body, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, Count(comments.review_id) AS comment_count
     FROM reviews
     LEFT JOIN comments
     ON reviews.review_id = comments.review_id
@@ -41,7 +42,7 @@ exports.fetchReviews = async (
     if (!validColumns.includes(sort_by) || !validOrder.includes(order)) {
       return Promise.reject({ status: 400, msg: "Bad request" });
     } else {
-      let queryStr = `SELECT reviews.owner, reviews.title, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, Count(comments.review_id) AS comment_count
+      let queryStr = `SELECT reviews.owner, reviews.title, reviews.review_body, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, Count(comments.review_id) AS comment_count
     FROM reviews 
     LEFT JOIN comments
     ON reviews.review_id = comments.review_id
@@ -62,7 +63,7 @@ exports.fetchReviewById = async (review_id) => {
     });
   } else {
     const result = await db.query(
-      ` SELECT reviews.owner, reviews.title, reviews.review_id, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, Count(comments.review_id) AS comment_count 
+      ` SELECT reviews.owner, reviews.title, reviews.review_id, reviews.review_body, reviews.category, reviews.review_img_url, reviews.created_at, reviews.votes, Count(comments.review_id) AS comment_count 
 FROM reviews 
 LEFT JOIN comments 
 ON reviews.review_id = comments.review_id 
@@ -120,6 +121,7 @@ exports.addReview = async (
       `INSERT INTO reviews (title, designer, owner, review_img_url, review_body, category) values ($1, $2, $3, $4, $5, $6) RETURNING *;`,
       [title, designer, owner, review_img_url, review_body, category]
     );
+    console.log(result.rows[0]);
     return result.rows[0];
   }
 };

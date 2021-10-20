@@ -43,6 +43,8 @@ describe("getReviewsById", () => {
       review_id: 4,
       review_img_url:
         "https://images.pexels.com/photos/278918/pexels-photo-278918.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      review_body:
+        "Consequat velit occaecat voluptate do. Dolor pariatur fugiat sint et proident ex do consequat est. Nisi minim laboris mollit cupidatat et adipisicing laborum do. Sint sit tempor officia pariatur duis ullamco labore ipsum nisi voluptate nulla eu veniam. Et do ad id dolore id cillum non non culpa. Cillum mollit dolor dolore excepteur aliquip. Cillum aliquip quis aute enim anim ex laborum officia. Aliqua magna elit reprehenderit Lorem elit non laboris irure qui aliquip ad proident. Qui enim mollit Lorem labore eiusmod",
       category: "social deduction",
       created_at: "2021-01-22T11:35:50.936Z",
       votes: 7,
@@ -108,6 +110,7 @@ describe("getReviews ", () => {
         owner: expect.any(String),
         title: expect.any(String),
         review_id: expect.any(Number),
+        review_body: expect.any(String),
         review_img_url: expect.any(String),
         category: expect.any(String),
         created_at: expect.any(String),
@@ -324,7 +327,7 @@ describe("patchCommentByCommentId", () => {
 });
 
 describe("postReview", () => {
-  test("200: Should respond with an the updated comment", async () => {
+  test("200: Should respond with an the updated review", async () => {
     const res = await request(app)
       .post("/api/reviews")
       .send({
