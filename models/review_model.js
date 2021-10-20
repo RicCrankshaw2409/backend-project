@@ -125,3 +125,19 @@ exports.addReview = async (
     return result.rows[0];
   }
 };
+
+exports.removeReviewByReviewId = async (review_id) => {
+  const reviewExist = await doesItExist("reviews", review_id);
+  if (!reviewExist) {
+    return Promise.reject({
+      status: 404,
+      msg: `No review found with the id ${review_id}`,
+    });
+  } else {
+    const result = await db.query(
+      "DELETE FROM reviews WHERE review_id = $1 RETURNING *;",
+      [review_id]
+    );
+    return result.rows[0];
+  }
+};

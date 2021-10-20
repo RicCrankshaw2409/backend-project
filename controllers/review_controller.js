@@ -3,6 +3,7 @@ const {
   updateReviewById,
   fetchReviews,
   addReview,
+  removeReviewByReviewId,
 } = require("../models/review_model");
 
 exports.getReviews = async (req, res, next) => {
@@ -52,5 +53,15 @@ exports.postReview = async (req, res, next) => {
   } catch (error) {
     console.log(error);
     next(error);
+  }
+};
+
+exports.deleteReview = async (req, res, next) => {
+  try {
+    const { review_id } = req.params;
+    const result = await removeReviewByReviewId(review_id);
+    res.status(204).send();
+  } catch (err) {
+    next(err);
   }
 };

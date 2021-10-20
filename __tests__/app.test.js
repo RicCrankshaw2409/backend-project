@@ -355,3 +355,19 @@ describe("postReview", () => {
       .expect(400);
   });
 });
+
+describe("deleteReviewByReviewId", () => {
+  test("204: Deletes review by review_id and returns a 204 code when complete", async () => {
+    const res = await request(app).delete("/api/reviews/1").expect(204);
+  });
+  test("404: returned for non-existent ID", async () => {
+    const res = await request(app).delete("/api/reviews/765").expect(404);
+    expect(res.body.msg).toBe("No review found with the id 765");
+  });
+  test("400: Returned Invalid review_id ", async () => {
+    const res = await request(app)
+      .delete("/api/reviews/invalid_url")
+      .expect(400);
+    expect(res.body.msg).toBe("Invalid URL format");
+  });
+});
