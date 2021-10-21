@@ -51,7 +51,6 @@ exports.postReview = async (req, res, next) => {
     );
     res.status(200).send({ review: result });
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

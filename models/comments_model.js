@@ -4,7 +4,7 @@ const { doesItExist } = require("../db/utils/input-verification");
 
 exports.fetchReviewCommentsByReviewId = async (review_id) => {
   const sort_by = "created_at";
-  const order = "ASC";
+  const order = "DESC";
   const reviewExists = await doesItExist("reviews", review_id);
   if (!reviewExists) {
     return Promise.reject({

@@ -7,7 +7,6 @@ exports.fetchReviews = async (
   order = "DESC",
   category
 ) => {
-  console.log(sort_by, category);
   const validColumns = [
     "review_id",
     "title",
@@ -122,7 +121,6 @@ exports.addReview = async (
       `INSERT INTO reviews (title, designer, owner, review_img_url, review_body, category) values ($1, $2, $3, $4, $5, $6) RETURNING *;`,
       [title, designer, owner, review_img_url, review_body, category]
     );
-    console.log(result.rows[0]);
     return result.rows[0];
   }
 };
