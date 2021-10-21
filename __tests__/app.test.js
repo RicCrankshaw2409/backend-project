@@ -144,7 +144,7 @@ describe("getReviews ", () => {
 
     expect(res.body.reviews).toHaveLength(11);
   });
-  test.only("200: Should filter by category and sort_by when provided both queries", async () => {
+  test("200: Should filter by category and sort_by when provided both queries", async () => {
     const res = await request(app)
       .get("/api/reviews?category=social deduction&sort_by=comment_count")
       .expect(200);

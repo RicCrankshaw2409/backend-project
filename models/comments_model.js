@@ -3,6 +3,8 @@ const db = require("../db/connection");
 const { doesItExist } = require("../db/utils/input-verification");
 
 exports.fetchReviewCommentsByReviewId = async (review_id) => {
+  const sort_by = "created_at";
+  const order = "ASC";
   const reviewExists = await doesItExist("reviews", review_id);
   if (!reviewExists) {
     return Promise.reject({
@@ -11,7 +13,7 @@ exports.fetchReviewCommentsByReviewId = async (review_id) => {
     });
   } else {
     const result = await db.query(
-      "SELECT * FROM comments WHERE review_id = $1;",
+      `SELECT * FROM comments WHERE review_id = $1 ORDER BY ${sort_by} ${order};`,
       [review_id]
     );
     return result.rows;
