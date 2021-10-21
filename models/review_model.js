@@ -30,7 +30,6 @@ exports.fetchReviews = async (
   );
   if (category) {
     const categoryExist = await doesItExist("categories", category);
-
     if (!categoryExist) {
       return Promise.reject({
         status: 404,

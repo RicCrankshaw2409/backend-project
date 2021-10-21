@@ -40,7 +40,7 @@ exports.createTables = async () => {
       author VARCHAR(50),
       FOREIGN KEY (author) REFERENCES users (username),
       review_id INT,
-      FOREIGN KEY (review_id) REFERENCES reviews (review_id),
+      FOREIGN KEY (review_id) REFERENCES reviews (review_id) ON DELETE CASCADE,
       votes INT DEFAULT 0,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       body VARCHAR (1000) NOT NULL
