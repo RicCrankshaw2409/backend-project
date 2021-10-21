@@ -144,6 +144,12 @@ describe("getReviews ", () => {
 
     expect(res.body.reviews).toHaveLength(11);
   });
+  test.only("200: Should filter by category and sort_by when provided both queries", async () => {
+    const res = await request(app)
+      .get("/api/reviews?category=social deduction&sort_by=comment_count")
+      .expect(200);
+  });
+
   test("404: When provided a non-existent category, return 404", async () => {
     const res = await request(app)
       .get("/api/reviews?category=not a category")

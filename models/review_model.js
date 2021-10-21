@@ -7,6 +7,7 @@ exports.fetchReviews = async (
   order = "DESC",
   category
 ) => {
+  console.log(sort_by, category);
   const validColumns = [
     "review_id",
     "title",
@@ -25,7 +26,8 @@ exports.fetchReviews = async (
     LEFT JOIN comments
     ON reviews.review_id = comments.review_id
     WHERE category = $1
-    GROUP BY reviews.review_id;`,
+    GROUP BY reviews.review_id
+    ORDER BY ${sort_by} ${order};`,
     [category]
   );
   if (category) {
