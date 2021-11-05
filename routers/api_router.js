@@ -6,11 +6,11 @@ const userRouter = require("./user.router");
 const app = require("../app");
 const { getEndPoints } = require("../controllers/api_controller");
 
-apiRouter.route("/").get(getEndPoints);
-
 apiRouter.use("/categories", categoryRouter);
 apiRouter.use("/reviews", reviewRouter);
 apiRouter.use("/comments", commentRouter);
 apiRouter.use("/users", userRouter);
+
+apiRouter.route("/").get(getEndPoints);
 
 module.exports = apiRouter;

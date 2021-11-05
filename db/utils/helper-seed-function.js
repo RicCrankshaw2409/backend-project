@@ -25,7 +25,7 @@ exports.createTables = async () => {
   await db.query(`CREATE TABLE reviews (
       review_id SERIAL PRIMARY KEY,
       title VARCHAR (100) NOT NULL,
-      review_body VARCHAR (1000) NOT NULL,
+      review_body VARCHAR (10000) NOT NULL,
       designer VARCHAR (1000) NOT NULL,
       review_img_url VARCHAR (1000) DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
       votes INT DEFAULT 0,
