@@ -223,30 +223,8 @@ describe("postCommentByReviewId", () => {
 });
 
 describe("getApi", () => {
-  test("200: responds with all available end-points", async () => {
+  test.only("200: responds with all available end-points", async () => {
     const res = await request(app).get("/api").expect(200);
-    expect(res.body).toEqual({
-      end_points: {
-        categories: {
-          GET: "/api/categories",
-        },
-        reviews: {
-          GET: "/api/reviews",
-          GET: "/api/reviews/:review_id",
-          GET: "/api/reviews/:review_id/comments",
-          PATCH: "/api/reviews/review_id",
-          POST: "/api/reviews/review_id/comments",
-        },
-        comments: {
-          DELETE: "/api/comments/:comment_id",
-          PATCH: "/api/comments/:comment_id",
-        },
-        users: {
-          GET: "/api/users",
-          GET: "/api/users/:username",
-        },
-      },
-    });
   });
 });
 
